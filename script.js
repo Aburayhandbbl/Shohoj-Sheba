@@ -4,8 +4,9 @@ const accessToken = '1WWaY_3IgVsh9OqIHf7l9PjpBcrcOTr7P0yzIDBvxDI'; // Ensure thi
 async function fetchProducts() {
     try {
         const response = await fetch(`https://cdn.contentful.com/spaces/${spaceId}/environments/master/entries?access_token=${accessToken}`);
+        if (!response.ok) throw new Error('Network response was not ok');
+
         const data = await response.json();
-        
         const productList = document.querySelector('.product-list');
         productList.innerHTML = ''; // Clear existing products
         
@@ -30,16 +31,10 @@ async function fetchProducts() {
 
             // Append the product card to the list
             productList.appendChild(productCard);
-
-            // Add event listener for the newly created button
-            const addToCartButton = productCard.querySelector('.add-to-cart');
-            addToCartButton.addEventListener('click', () => {
-                alert(`Added ${product.name} to cart!`);
-                // You can also integrate Snipcart's functionality here if needed
-            });
         });
     } catch (error) {
         console.error('Error fetching products:', error);
+        alert('Failed to load products. Please try again later.'); // User-friendly error
     }
 }
 
